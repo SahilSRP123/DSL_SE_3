@@ -1,0 +1,113 @@
+/*
+Problem Statement:
+Pizza parlor accepting maximum M orders. Orders are served in first come first served basis. 
+Order once placed cannot be cancelled. 
+Write C++ program to simulate the system using circular queue using array.
+*/
+#include <iostream>
+using namespace std;
+#define size 10
+class pizza{
+    int porder[size];
+    int front, rear;
+public:
+    pizza(){
+       front=rear=-1; 
+    }
+    int qfull(){
+        if(((front==0)&&(rear==size-1))||(front==(rear+1)%size))
+            return 1;
+        return 0;
+    }
+    int qempty(){
+        if(front==-1)
+            return 1;
+        return 0;
+    }
+    void accept(int);
+    void pay(int);
+    void order();
+};
+
+void pizza::accept(int item){
+    if(qfull())
+        cout<<"\nOrders are full, please try again later!?!";
+    else{
+        if((front==-1)){
+            front=rear=0;
+        }
+        else{
+            rear=(rear+1)%size;
+        }
+        porder[rear]=item;
+        cout<<"\nOrder Successfully placed, please wait for sometime.";
+    }
+}
+
+void pizza::pay(int n)
+{
+ 	if(front==-1)
+ 	{
+ 		cout<<"\nNo Orders in queue.";
+ 		return;
+    }
+    else
+    {
+	 	cout<<"\n Order Item: "<<porder[front]<<" is processed.\n";
+	 	if(front==rear) //only one order
+	 	{
+	 		front=rear=-1;
+        }
+		 else
+        {
+		 	front=(front+1)%size;
+        }
+    }
+    cout<<"\nTotal amount to pay: "<<n*100;
+    cout<<"\nThank you visit Again!\n";
+ }
+
+void pizza::order(){
+    if(qempty())
+        cout<<"\nNo orders in queue.";
+    else{
+        int temp;
+        cout<<"\nThe following orders are in queue- \n";
+        temp = front;
+        while(temp!=rear){
+            cout<<"\t"<<porder[temp];
+            temp=(temp+1)%size;
+        }
+        cout<<"\t"<<porder[temp];
+    }
+}
+
+int main()
+{
+    pizza p1;
+    int ch,k,n;
+    do
+    {
+     cout<<"\n\t------------------------------ Welcome To Pizza Parlor---------------------------------\n";
+     cout << "\n1.Accept order\n2.Make payment\n3.Pending Orders\n4.Quit\nEnter your choice: ";
+     cin>>ch;
+     switch(ch)
+     {
+      case 1:cout<<"\nWhich Pizza do you like most: \n";
+             cout<<"\n1.Veg Soya Pizza\n2.Veg Butter Pizza\n3.Egg Pizza";
+             cout<<"\nPlease enter your order: ";
+             cin>>k;
+             p1.accept(k);
+             break;
+      case 2:cout<<"\nHow many Pizza(s) ?";
+             cin>>n;
+             p1.pay(n);
+             break;
+      case 3:cout<<"\n Following orders are in queue to deliver as follows-\n";
+             p1.order();
+             break;
+     }
+    }while(ch!=4);
+
+    return 0;
+}
